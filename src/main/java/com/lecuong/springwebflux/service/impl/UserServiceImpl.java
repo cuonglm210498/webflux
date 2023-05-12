@@ -10,9 +10,17 @@ import com.lecuong.springwebflux.repository.UserRepository;
 import com.lecuong.springwebflux.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author CuongLM18
  * @created 11/05/2023 - 8:57 AM
@@ -58,5 +66,19 @@ public class UserServiceImpl implements UserService {
                 throw new RuntimeException("Not found");
             }
         });
+    }
+
+    @Override
+    public Mono<BaseResponse<List<UserResponse>>> getAll() {
+        Mono<List<User>> users = userRepository.findAll().collectList();
+        return users.map(user -> {
+            List<UserResponse> userResponses = user.stream().map(userMapper::to).collect(Collectors.toList());
+            return new BaseResponse(HttpStatus.OK, new ArrayList<>(userResponses));
+        });
+    }
+
+    @Override
+    public Mono<Page<UserResponse>> getAll(Pageable pageable) {
+        return null;
     }
 }

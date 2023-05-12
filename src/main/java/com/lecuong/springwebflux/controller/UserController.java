@@ -10,6 +10,8 @@ import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 /**
  * @author CuongLM18
  * @created 11/05/2023 - 9:13 AM
@@ -36,5 +38,10 @@ public class UserController {
     @GetMapping("/{id}")
     public Mono<BaseResponse<UserResponse>> findById(@PathVariable Long id) {
         return userService.findById(id);
+    }
+
+    @GetMapping
+    public Mono<BaseResponse<List<UserResponse>>> getAll() {
+        return userService.getAll();
     }
 }
