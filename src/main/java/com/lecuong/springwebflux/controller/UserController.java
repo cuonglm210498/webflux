@@ -2,6 +2,7 @@ package com.lecuong.springwebflux.controller;
 
 import com.lecuong.springwebflux.entity.User;
 import com.lecuong.springwebflux.model.request.UserSaveRequest;
+import com.lecuong.springwebflux.model.request.UserUpdateRequest;
 import com.lecuong.springwebflux.model.response.BaseResponse;
 import com.lecuong.springwebflux.model.response.UserResponse;
 import com.lecuong.springwebflux.repository.UserRepository;
@@ -43,5 +44,11 @@ public class UserController {
     @GetMapping
     public Mono<BaseResponse<List<UserResponse>>> getAll() {
         return userService.getAll();
+    }
+
+    @PutMapping("/{id}")
+    public Mono<BaseResponse<UserResponse>> update(@RequestBody UserUpdateRequest userUpdateRequest,
+                                                   @PathVariable Long id) {
+        return userService.update(id, userUpdateRequest);
     }
 }

@@ -53,7 +53,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<BaseResponse<UserResponse>> update(Long id, UserUpdateRequest userUpdateRequest) {
-        return null;
+
+        Mono<User> userMono = userRepository.findById(id);
+
+        return userMono.flatMap(user -> {
+            user.setEmail(userUpdateRequest.getEmail());
+            user.setName(userUpdateRequest.getName());
+            return userRepository.save(user).thenReturn(new BaseResponse<>(HttpStatus.OK, userMapper.to(user)));
+        });
     }
 
     @Override
